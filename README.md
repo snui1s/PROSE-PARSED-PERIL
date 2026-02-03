@@ -21,44 +21,73 @@ An automated resume evaluation system using AI Agents to analyze and score candi
    - Place your resume PDF files in the `resumes/` folder.
    - Edit `job_description.txt` with your desired job requirements.
 
-## How to Use
+## Quick Start
 
-### Option 1: Using `uv` (Recommended)
+1. **Prepare:**
+   - Put your Resume PDFs into the `resumes` folder.
+   - Paste your job requirements into `job_description.txt`.
+   - (First time only) Create a `.env` file and add `OPENAI_API_KEY=sk-...`.
 
-1. **Create & Sync Environment:**
-
-   ```powershell
-   uv sync
-   ```
-
-2. **Run the Evaluation:**
-
-   ```powershell
-   uv run main.py
-   ```
-
-### Option 2: Using standard Python & pip
-
-1. **Create Virtual Environment:**
-
-   ```powershell
-   python -m venv .venv
-   ```
-
-2. **Activate Environment:**
-   - Windows: `.\.venv\Scripts\activate`
-   - Mac/Linux: `source .venv/bin/activate`
-3. **Install Dependencies:**
-
-   ```powershell
-   pip install -e .
-   ```
-
-4. **Run the Evaluation:**
+2. **Run:**
 
    ```powershell
    python main.py
    ```
+
+   _Then press `1` and Enter._
+
+3. **Check Results:**
+   - The system will generate both **`judge_results.csv`** and **`judge_results.xlsx`**.
+   - Open the **Excel** file to see scores and detailed feedback.
+
+---
+
+## How to Use (Detailed)
+
+### 1. Interactive Mode (Menu) - Best for Beginners
+
+Simply run the main script. The system will guide you through a menu to verify files, choose OCR modes, and start the evaluation.
+
+```powershell
+# Using uv (Recommended)
+uv run main.py
+
+# OR Using standard Python
+python main.py
+```
+
+**You will see a menu like this:**
+
+```text
+1. Run Complete Pipeline (Auto Mode) -> Recommended. Smartly chooses between Text/OCR.
+2. Run Complete Pipeline (Force Text) -> Fast. Ignores images (good for digital PDFs).
+3. Run Complete Pipeline (Force OCR)  -> Slow. Forces image scanning (good for scans).
+4. Run Judge Only (Skip OCR Step)     -> Skip extracting text, just re-evaluate existing CSV.
+5. Exit
+```
+
+### 2. Advanced Mode (Automation / CLI) - Best for Scripts
+
+You can skip the menu by passing arguments. This is perfect for setting up automated tasks or cron jobs.
+
+| Command                      | Description                                         |
+| :--------------------------- | :-------------------------------------------------- |
+| `python main.py --mode auto` | **Standard.** Auto-detects text vs scanned PDF.     |
+| `python main.py --mode text` | **Fastest.** Forces text extraction only (PyMuPDF). |
+| `python main.py --mode ocr`  | **Most Correct.** Forces OCR on every file (Slow).  |
+| `python main.py --mode skip` | **Judge Only.** Skips OCR processing completely.    |
+
+**Example:**
+
+```powershell
+uv run main.py --mode auto
+```
+
+### 3. File Handling Logic (Intelligent Check)
+
+- If the `resumes/` folder is missing, the script will **create it for you** and ask you to put files in.
+- If the folder is empty, it will warn you.
+- If no PDF files are found but a CSV exists, it will offer to use the old data.
 
 ## Key File Structure
 
